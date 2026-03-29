@@ -174,6 +174,9 @@ void SetMockSomeModule(MockSomeModule* mock);
 
 ## STEP 4: Configure CMakeLists.txt
 
+If a CMakeLists.txt already exists, DELETE it and create a new one using the template below.
+The existing one is for the production build. We need a completely separate one for unit testing.
+
 ```cmake
 cmake_minimum_required(VERSION 3.14)
 project(YourTestProject LANGUAGES CXX)
