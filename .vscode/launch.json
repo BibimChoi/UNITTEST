@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug GTest - 특정 테스트",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/motor_controller_ut.exe",
+            "args": [
+                "--gtest_filter=MotorControllerTest.EmergencyStop_LogSuccess_ReturnsNone"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "preLaunchTask": "CMake Build (Debug)"
+        },
+        {
+            "name": "Debug GTest - 전체 테스트",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/motor_controller_ut.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "CMake Build (Debug)"
+        }
+    ]
+}
