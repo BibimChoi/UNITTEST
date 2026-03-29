@@ -232,6 +232,42 @@ gtest_discover_tests(your_test)
 - `test/fakes/` cpp: ALL fake implementations.
 - Include order: `test/fakes` > `test/mocks` > `production`. NEVER change this order.
 
+### Multiple test targets
+
+If you need to test MORE THAN ONE production cpp file (e.g., MotorController.cpp AND SensorManager.cpp),
+DO NOT put them in the same `add_executable`. Create SEPARATE executables for each.
+
+The reason: if `SensorManager.cpp` is the test target, it cannot also have a fake (`SensorManager_fake.cpp`).
+But `MotorController` tests need `SensorManager_fake.cpp`. They conflict.
+
+```cmake
+# --- Test 1: MotorController ---
+add_executable(motor_controller_ut
+    production/MotorController.cpp          # test target
+    test/fakes/SensorManager_fake.cpp       # SensorManager is FAKE here
+    test/fakes/Logger_fake.cpp
+    test/test_MotorController.cpp
+)
+target_include_directories(motor_controller_ut PRIVATE
+    test/fakes test/mocks production
+)
+target_link_libraries(motor_controller_ut GTest::gtest_main GTest::gmock)
+
+# --- Test 2: SensorManager ---
+add_executable(sensor_manager_ut
+    production/SensorManager.cpp            # test target
+    test/fakes/MotorController_fake.cpp     # MotorController is FAKE here
+    test/fakes/Logger_fake.cpp
+    test/test_SensorManager.cpp
+)
+target_include_directories(sensor_manager_ut PRIVATE
+    test/fakes test/mocks production
+)
+target_link_libraries(sensor_manager_ut GTest::gtest_main GTest::gmock)
+```
+
+RULE: One `add_executable` per test target. The test target is REAL, everything else is FAKE.
+
 ---
 
 ## STEP 5: Write the test file
